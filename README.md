@@ -63,9 +63,11 @@ def relay(path):
         return f"Relay error: {e}", 500
 ```
 
+**Please do not use my API for production.**
+
 ## ⚙ Backend on anw.is-a.dev/api/ablaze
 
-This is the source code for the Flask endpoint at `anw.is-a.dev/api/ablaze`. **Please host it yourself and do not use my API for production. I do NOT guarantee 100% uptime.**
+This is the source code for the Flask endpoint at `anw.is-a.dev/api/ablaze`. **Please host it yourself and do not use my API for production. I do NOT guarantee 100% uptime.** Why not just host Ablaze on `anw.is-a.dev`? Because I don't want to. Ofcourse, you don't need this if you are hosting it by yourself.  
 
 ```python
 @app.route('/api/ablaze', defaults={'url_path': ''}, methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
