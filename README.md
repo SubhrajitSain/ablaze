@@ -20,6 +20,49 @@ Ablaze stores your cookies on Upstash for a maximum duration of 1 hour after ina
 - Android 8.1 /w Google Chrome - `OK`
 - [MrrpOS GNU/Linux](https://anw.is-a.dev/mrrpos) /w linux 6.13.2 /w Lynx 2.9.2 - `OK`
 
+## ⚙ Backend on dih.pythonanywhere.com
+
+`anw.is-a.dev` is whitelisted on PythonAnywhere. By using my domain, I created a 3-step proxy for Ablaze's website. Why? Because PythonAnywhere is the only reliable host which allows `HTTP` while Vercel forces `HTTPS`, which most retro browsers don't support. Here's the source code:
+
+```python
+from flask import Flask, request, Response
+from urllib.parse import urlparse
+import requests
+
+app = Flask(__name__)
+
+BACKEND_URL = "https://anw.is-a.dev/api/ablaze"
+
+@app.route('/', defaults={'path': ''}, methods=["GET", "POST"])
+@app.route('/<path:path>', methods=["GET", "POST"])
+def relay(path):
+    target_url = f"{BACKEND_URL}/{path}" if path != '' else f"{BACKEND_URL}"
+    params = request.args
+
+    try:
+        if request.method == "GET":
+            resp = requests.get(target_url, params=params, headers={"User-Agent": request.headers.get("User-Agent")}, allow_redirects=False)
+        else:
+            resp = requests.post(target_url, params=params, data=request.get_data(), headers={"User-Agent": request.headers.get("User-Agent")}, allow_redirects=False)
+
+        excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+        headers = {k: v for k, v in resp.headers.items() if k.lower() not in excluded_headers}
+
+        if 'Location' in resp.headers:
+            location = resp.headers['Location']
+            parsed_loc = urlparse(location)
+            
+            if location.startswith('/') and not location.startswith('/api/ablaze'):
+                headers['Location'] = f"/api/ablaze{location}"
+            elif parsed_loc.netloc == "anw.is-a.dev" and not parsed_loc.path.startswith('/api/ablaze'):
+                new_path = f"/api/ablaze{parsed_loc.path}"
+                headers['Location'] = location.replace(parsed_loc.path, new_path, 1)
+
+        return Response(resp.content, status=resp.status_code, headers=headers)
+    except Exception as e:
+        return f"Relay error: {e}", 500
+```
+
 ## 🤝 Contributors:
 
 None at the moment, but you can become one! Talk to [ANW](https://anw.is-a.dev/#contact) or make a PR to contribute.
