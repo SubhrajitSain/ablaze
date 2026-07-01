@@ -121,6 +121,10 @@ def clean_html_for_retro(html_content, base_url, use_pure_proxy_route=False, all
     else:
         return str(soup)
 
+@app.before_request
+def debug():
+    print("REQUEST:", request.path)
+
 @app.route('/')
 def index():
     cleanup()
@@ -202,6 +206,7 @@ def search(lite=None):
 @app.route('/proxy/<path:url>', methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 @app.route('/proxy<lite>/<path:url>', methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 def proxy(url, lite=None):
+    print("ENTERED proxy:", request.path)
     cleanup()
     lite = lite == '-lite'
     url = unquote(url)
@@ -264,14 +269,13 @@ def proxy(url, lite=None):
                 allow_redirects=False
             )
         save_proxy_session_cookies(proxy)
-        response.raise_for_status()
         if 300 <= response.status_code < 400:
             location = response.headers.get("Location")
 
             if location:
                 location = urljoin(url, location)
                 return redirect(f"/proxy{"-lite" if lite else ""}/" + quote(location, safe=""))
-
+        response.raise_for_status()
         content_type = response.headers.get('Content-Type', '').lower()
 
         if 'text/html' not in content_type:
@@ -307,6 +311,7 @@ def proxy(url, lite=None):
 @app.route('/pure-proxy/<path:url>', methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 @app.route('/pure-proxy<lite>/<path:url>', methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 def pure_proxy(url, lite=None):
+    print("ENTERED pure_proxy:", request.path)
     cleanup()
     lite = lite == '-lite'
     url = unquote(url)
@@ -369,14 +374,13 @@ def pure_proxy(url, lite=None):
                 allow_redirects=False
             )
         save_proxy_session_cookies(proxy)
-        response.raise_for_status()
         if 300 <= response.status_code < 400:
             location = response.headers.get("Location")
 
             if location:
                 location = urljoin(url, location)
-                return redirect(f"/proxy{"-lite" if lite else ""}/" + quote(location, safe=""))
-
+                return redirect(f"/pure-proxy{"-lite" if lite else ""}/" + quote(location, safe=""))
+        response.raise_for_status()
         content_type = response.headers.get('Content-Type', '').lower()
 
         if 'text/html' not in content_type:
