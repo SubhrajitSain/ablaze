@@ -408,6 +408,14 @@ def http_status_code_abort(status_code):
     abort(status_code)
     return render_template('error.html', title="Except Route Failed", error_message="The /except route failed to abort the connection."), 500
 
+@app.route('/cdn-cgi/<path:path>', methods=["GET", "POST"])
+def ignore_cloudflare_challenges(path):
+    return "", 204
+
+@app.route('/favicon.ico')
+def favicon_bypass():
+    return "", 204
+
 @app.errorhandler(Exception)
 def exception_handler(e):
     cleanup()
