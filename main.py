@@ -384,20 +384,11 @@ def pure_proxy(url, lite=None):
         content_type = response.headers.get('Content-Type', '').lower()
 
         if 'text/html' not in content_type:
-            def generate_file_content():
-                for chunk in response.iter_content(chunk_size=8192):
-                    yield chunk
-
-            headers = {
-                'Content-Type': content_type,
-                'Content-Disposition': response.headers.get('Content-Disposition', f'attachment; filename="{url.split("/")[-1]}"'),
-                'Content-Length': response.headers.get('Content-Length'),
-            }
-            if 'Transfer-Encoding' in headers:
-                del headers['Transfer-Encoding']
-
-            server_resp = Response(stream_with_context(generate_file_content()), headers=headers)
-            return server_resp
+            return Response(
+                response.content,
+                status=response.status_code,
+                content_type=response.headers.get("Content-Type")
+            )
 
         html_content = response.text
         cleaned_html_body = clean_html_for_retro(html_content, url, True, allowed_attrs, interactive_tags, replacements)
