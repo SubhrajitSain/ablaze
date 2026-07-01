@@ -26,12 +26,10 @@ Ablaze stores your cookies on Upstash for a maximum duration of 1 hour after ina
 
 ```python
 from flask import Flask, request, Response
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 import requests
 
 app = Flask(__name__)
-
-BACKEND_URL = "https://anw.is-a.dev/api/ablaze"
 
 @app.route('/', defaults={'path': ''}, methods=["GET", "POST"])
 @app.route('/<path:path>', methods=["GET", "POST"])
@@ -40,11 +38,11 @@ def relay(path):
         path = path.replace("api/ablaze/", "", 1)
     elif path == "api/ablaze":
         path = ""
-    target_url = f"{BACKEND_URL}/{path}" if path != '' else f"{BACKEND_URL}"
+
+    path = quote(path, safe="")
+
+    target_url = f"https://anw.is-a.dev/api/ablaze/{path}" if path else "https://anw.is-a.dev/api/ablaze"
     params = request.args
-    
-    if request.query_string:
-        pass
 
     try:
         if request.method == "GET":
@@ -56,14 +54,7 @@ def relay(path):
         headers = {k: v for k, v in resp.headers.items() if k.lower() not in excluded_headers}
 
         if 'Location' in resp.headers:
-            location = resp.headers['Location']
-            parsed_loc = urlparse(location)
-
-            if location.startswith('/') and not location.startswith('/api/ablaze'):
-                headers['Location'] = f"/api/ablaze{location}"
-            elif parsed_loc.netloc == "anw.is-a.dev" and not parsed_loc.path.startswith('/api/ablaze'):
-                new_path = f"/api/ablaze{parsed_loc.path}"
-                headers['Location'] = location.replace(parsed_loc.path, new_path, 1)
+            headers['Location'] = resp.headers['Location']
 
         return Response(resp.content, status=resp.status_code, headers=headers)
     except Exception as e:
@@ -80,8 +71,12 @@ This is the source code for the Flask endpoint at `anw.is-a.dev/api/ablaze`. **P
 @app.route('/api/ablaze', defaults={'url_path': ''}, methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 @app.route('/api/ablaze/<path:url_path>', methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 def ablaze_backend_proxy(url_path):
-    if "api/ablaze" in url_path:
-        url_path = url_path.replace("api/ablaze/", "").replace("api/ablaze", "")
+    url_path = unquote(url_path)
+    
+    if url_path.startswith("api/ablaze/"):
+        url_path = url_path.replace("api/ablaze/", "", 1)
+    elif url_path == "api/ablaze":
+        url_path = ""
 
     if "proxy/https:/" in url_path and "proxy/https://" not in url_path:
         url_path = url_path.replace("proxy/https:/", "proxy/https://", 1)
@@ -92,7 +87,12 @@ def ablaze_backend_proxy(url_path):
         url_path = url_path.replace("pure-proxy/https:/", "pure-proxy/https://", 1)
     elif "pure-proxy/http:/" in url_path and "pure-proxy/http://" not in url_path:
         url_path = url_path.replace("pure-proxy/http:/", "pure-proxy/http://", 1)
-        
+
+    if url_path.startswith("proxy/"):
+        url_path = "proxy/" + quote(unquote(url_path[6:]), safe="")
+    elif url_path.startswith("pure-proxy/"):
+        url_path = "pure-proxy/" + quote(unquote(url_path[11:]), safe="")
+
     target_url = f"https://ablaze-cyan.vercel.app/{url_path}"
     headers = { k: v for k, v in request.headers.items() if k.lower() not in ["host", "accept-encoding"] }
     
