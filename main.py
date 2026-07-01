@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, redirect, stream_with_context, render_template, abort, session
+from flask import Flask, request, Response, redirect, stream_with_context, render_template, abort, session, jsonify
 from urllib.parse import quote, unquote, urljoin
 from bs4.element import Comment
 from upstash_redis import Redis
@@ -398,6 +398,10 @@ def pure_proxy(url, lite=None):
     except Exception as e:
         error_message = f"An unexpected error occurred: {e}"
         return render_template('error_lite.html' if lite else 'error.html', title="Pure Proxy Error", error_message=error_message, query=request.args.get('q', ''))
+
+@app.route("/health")
+def health_check():
+    return jsonify({"status": "online"})
 
 @app.route("/except/<int:status_code>")
 def http_status_code_abort(status_code):
