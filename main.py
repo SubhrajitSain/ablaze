@@ -91,9 +91,9 @@ def clean_html_for_retro(html_content, base_url, use_pure_proxy_route=False, all
                     encoded_url = quote(absolute_url, safe="")
 
                     if use_pure_proxy_route:
-                        tag.attrs[attr] = f"/pure-proxy/{encoded_url}"
+                        tag.attrs[attr] = f"/api/ablaze/pure-proxy/{encoded_url}"
                     else:
-                        tag.attrs[attr] = f"/proxy/{encoded_url}"
+                        tag.attrs[attr] = f"/api/ablaze/proxy/{encoded_url}"                        
                     if attr == "action" and "method" not in tag.attrs:
                         tag["method"] = "get"
         else:

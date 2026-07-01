@@ -36,8 +36,15 @@ BACKEND_URL = "https://anw.is-a.dev/api/ablaze"
 @app.route('/', defaults={'path': ''}, methods=["GET", "POST"])
 @app.route('/<path:path>', methods=["GET", "POST"])
 def relay(path):
+    if path.startswith("api/ablaze/"):
+        path = path.replace("api/ablaze/", "", 1)
+    elif path == "api/ablaze":
+        path = ""
     target_url = f"{BACKEND_URL}/{path}" if path != '' else f"{BACKEND_URL}"
     params = request.args
+    
+    if request.query_string:
+        pass
 
     try:
         if request.method == "GET":
@@ -45,13 +52,13 @@ def relay(path):
         else:
             resp = requests.post(target_url, params=params, data=request.get_data(), headers={"User-Agent": request.headers.get("User-Agent")}, allow_redirects=False)
 
-        excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+        excluded_headers = ['host', 'content-encoding', 'content-length', 'transfer-encoding', 'connection']
         headers = {k: v for k, v in resp.headers.items() if k.lower() not in excluded_headers}
 
         if 'Location' in resp.headers:
             location = resp.headers['Location']
             parsed_loc = urlparse(location)
-            
+
             if location.startswith('/') and not location.startswith('/api/ablaze'):
                 headers['Location'] = f"/api/ablaze{location}"
             elif parsed_loc.netloc == "anw.is-a.dev" and not parsed_loc.path.startswith('/api/ablaze'):
