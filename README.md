@@ -1,31 +1,21 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fvercel%2Ftree%2Fmain%2Fexamples%2Fflask&demo-title=Flask%20API&demo-description=Use%20Flask%20API%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fvercel-plus-flask.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994600/random/python.png)
+# 🔥 Ablaze
 
-# Flask + Vercel
+A simple search engine + website proxy so that you can browse the modern web on browsers from the late 20th century.  
 
-This example shows how to use Flask on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
+**Website: https://ablaze-psi.vercel.app/ | https://ablaze.anw.is-a.dev/ (soon)**  
 
-## Demo
+It uses the Python DDGS module for getting search results (aggregated) and a custom-made page stripper based proxy service so that you can freely browse the current, modern Internet on super old browsers. It also comes with a lite mode (to use, visit the `/lite` route!) for even more compatibility. It has both HTTP and HTTPS support, thanks to Vercel!  
 
-https://vercel-plus-flask.vercel.app/
+Ablaze stores your cookies on Upstash for a maximum duration of 1 hour after inactivity to keep you logged into sites using the proxy.
 
-## How it Works
+## ✅ Tested On:
 
-This example uses the Web Server Gateway Interface (WSGI) with Flask to handle requests on Vercel with Serverless Functions.
+- (Oracle VirtualBox VM) Windows XP Pro SP3 64bit /w K-Meleon 76.4 - `OK`
+- (DOSBox-X VM) Windows 98 SE /w MS IE 5.0 - `OK`
+- Windows 10 Pro 22H2 64bit /w Perplexity Comet, Google Chrome, Mozilla Firefox - `OK`
+- Android 8.1 /w Google Chrome - `OK`
+- [MrrpOS GNU/Linux](https://anw.is-a.dev/mrrpos) /w linux 6.13.2 /w Lynx 2.9.2 - `OK`
 
-## Running Locally
+## 🤝 Contributors:
 
-```bash
-npm i -g vercel
-python -m venv .venv
-source .venv/bin/activate
-uv sync  # or alternatively pip install flask gunicorn
-gunicorn main:app
-```
-
-Your Flask application is now available at `http://localhost:3000`.
-
-## One-Click Deploy
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fvercel%2Ftree%2Fmain%2Fexamples%2Fflask&demo-title=Flask%20API&demo-description=Use%20Flask%20API%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fvercel-plus-flask.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994600/random/python.png)
+None at the moment, but you can become one! Talk to [ANW](https://anw.is-a.dev/#contact) or make a PR to contribute.

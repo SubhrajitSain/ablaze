@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Proxied:
+    <a href="{{ proxied_url }}"><font color="#0033CC">{{ proxied_url }}</font></a>
+  </h2>
+  <hr>
+  <table width="100%" border="0" cellspacing="6" cellpadding="6" bgcolor="#F8F8F8">
+    <tr>
+      <td>
+        <font face="Verdana" size="2" color="#000000">
+          {{ cleaned_body | safe }}
+        </font>
+      </td>
+    </tr>
+  </table>
+{% endblock %}

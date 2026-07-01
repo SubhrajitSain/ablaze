@@ -1,0 +1,17 @@
+{% extends "base_lite.html" %}
+{% block content %}
+  <h2 style="color:#CC0000;">Error: {{ title }}</h2>
+
+  <p style="color:#CC0000;">{{ error_message | safe }}</p>
+
+  {% if note %}
+    <p>{{ note }}</p>
+  {% endif %}
+
+  {% if query %}
+    <p>Your query: {{ query }}</p>
+  {% endif %}
+
+  <hr>
+  <p>Return to <a href="/lite">Home</a> or try searching later.</p>
+{% endblock %}

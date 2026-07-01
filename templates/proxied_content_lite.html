@@ -1,0 +1,9 @@
+{% extends "base_lite.html" %}
+{% block content %}
+  <h2>Proxied: <a href="{{ proxied_url }}" style="color:#0033CC;">{{ proxied_url }}</a></h2>
+  <hr>
+
+  <div>
+    {{ cleaned_body | safe }}
+  </div>
+{% endblock %}

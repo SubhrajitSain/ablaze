@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2><font color="#CC0000">Error: {{ title }}</font></h2>
+  <table width="100%" border="0" cellspacing="6" cellpadding="6" bgcolor="#FFF5F5">
+    <tr>
+      <td>
+        <font size="2" color="#CC0000">
+          {{ error_message | safe }}
+        </font>
+        {% if note %}
+          <p><font color="#000000">{{ note }}</font></p>
+        {% endif %}
+        {% if query %}
+          <p><font color="#000000">Your query: {{ query }}</font></p>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+  <hr>
+  <center><font size="-1">Return to <a href="/">Home</a> or try searching later.</font></center>
+{% endblock %}

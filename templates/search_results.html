@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <h3>Results for "<font color="#CC3300">{{ query }}</font>"</h2>
+  <hr>
+
+  {% if results %}
+    <table width="100%" border="0" cellspacing="4" cellpadding="6" bgcolor="#121212">
+      {% for result in results %}
+        <tr>
+          <td valign="top">
+            <font face="Verdana" size="2" color="#F3F3F3">
+              <b>{{ result.index }}.</b>
+              {% if result.href %}
+                <a href="{{ result.href }}">{{ result.title }}</a>{% if result.proxy %} | <a href="{{ result.proxy }}">[Proxy]</a>{% endif %}
+              {% else %}
+                {{ result.title }}{% if result.proxy %} | <a href="{{ result.proxy }}">[Proxy]</a>{% endif %}
+              {% endif %}
+              <br>
+              <font color="#EEEEEE">{{ result.body }}</font>
+            </font>
+          </td>
+        </tr>
+        <tr><td><hr size="1" color="#DDDDDD"></td></tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p><b>No search results found.</b></p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base_lite.html" %}
+{% block content %}
+  <h3>Results for <span style="color:#CC3300;">"{{ query }}"</span></h3>
+  <hr>
+
+  {% if results %}
+    {% for result in results %}
+      <p>
+        <b>{{ result.index }}.</b>
+        {% if result.href %}
+          <a href="{{ result.href }}">{{ result.title }}</a>
+        {% else %}
+          {{ result.title }}
+        {% endif %}
+
+        {% if result.proxy %}
+          | <a href="{{ result.proxy }}">[Proxy]</a>
+        {% endif %}
+        <br>
+        <span style="color:#EEEEEE;">{{ result.body }}</span>
+      </p>
+    {% endfor %}
+  {% else %}
+    <p><b>No search results found.</b></p>
+  {% endif %}
+{% endblock %}

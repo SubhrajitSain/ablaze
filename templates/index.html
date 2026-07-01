@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+  <center>
+    <h2><font color="#ff6021">Ablaze</font></h2>
+    <p><font size="-1">Surf the modern web. On a retro browser. Its that simple.</font></p>
+    <p><font size="-3">Is Ablaze not loading properly? <a href="/lite" style="color:#ffffff;">Switch to lite mode...</a></font></p>
+
+    <form action="/search" method="get" class="searchbox">
+      <input type="text" name="q" size="45" placeholder="Search the web...">
+      <input type="submit" value="Search">
+    </form>
+  </center>
+
+  <hr>
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="6" bgcolor="#333333">
+    <tr><td>
+      <h3>Proxy Access</h3>
+      <p>Browse modern sites through our simplified proxy. Simply enter the URL of the site you want to visit.</p>
+
+      <form action="/go" method="get">
+        <input type="text" name="url" size="40" placeholder="Enter URL to proxy...">
+        <input type="submit" value="Proxy!">
+      </form>
+
+      <p><font size="-1">Need a cleaner, non-interrupted and blazing fast version? Try <b>Pure-Proxy</b> mode:</font></p>
+      <form action="/go-pure" method="get">
+        <input type="text" name="url" size="40" placeholder="Enter URL to pure-proxy...">
+        <input type="submit" value="Pure-Proxy!">
+      </form>
+    </td></tr>
+  </table>
+
+  <hr>
+
+  <h3>About</h3>
+  <table width="100%" border="0" cellspacing="4" cellpadding="4" bgcolor="#333333">
+    <tr><td>
+      <b>What is Ablaze?</b><br>
+      Ablaze (formerly DihFind) is a search engine and website proxy service built for vintage browsers. It rewrites modern sites for simpler, text-friendly viewing by stripping out JS, modern CSS and HTML. Sites remain somewhat functional. Too modern sites that rely heavily on JS or modern CSS may not work properly.<br><br>
+
+      <b>Why so few results?</b><br>
+      The system limits responses to the first 50 matches for speed and clarity. Actually, you will get about more or less 35 results at a time.<br><br>
+
+      <b>How does it work?</b><br>
+      A Python backend (with Flask and/or WSGI (depends on our current hosting)) fetches pages in memory, strips complex scripts, and rewrites links. Then it sends you the old-school compatible HTML pages.<br><br>
+
+      <b>What happens to my browsing data?</b><br>
+      Your data is <b>never</b> shared outside Ablaze. Your site data (cookies only) are completely wiped out from our DB after 1 hour of inactivity and NEVER RESTORED. This also means that not using Ablaze for 1 hour will completely reset your login info for websites, etc.
+
+      <b>Why was Ablaze made?</b><br>
+      To keep old machines exploring the modern Internet without breaking, like IE 5.0 on Windows 98 SE, as well as old Mac's.<br><br>
+
+      <b>What was Ablaze inspired by?</b><br>
+      Ablaze was inspired by <i>FrogFind</i>, made by Action Retro (YouTuber).
+    </td></tr>
+  </table>
+{% endblock %}

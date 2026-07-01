@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>{{ title }}</title>
+</head>
+<body bgcolor="#1e1e1e" text="#ffffff" link="#cc6d00" vlink="#6a3300" alink="#fffb00">
+
+  <div style="background-color: #a74300; padding: 6px;">
+    <b><a href="/lite" style="color:#ffffff; text-decoration:none;">Ablaze (lite)</a></b><sup> by ANW</sup>
+    &nbsp; | &nbsp;
+    <form action="/search-lite" method="get" style="display:inline;">
+      <input type="text" name="q" value="{{ query if query is not none else '' }}">
+      <input type="submit" value="Search">
+    </form>
+  </div>
+
+  <a href="/" style="color:#ffffff;">Click to switch back to normal mode...</a>
+  <hr>
+
+  {% block content %}{% endblock %}
+
+  <hr>
+  <p style="color:#a3a3a3; font-size:small;">
+    <i>A retro gateway to the modern web.</i><br>
+    &copy; 2026 Ablaze by ANW. All rights reserved.
+  </p>
+</body>
+</html>
