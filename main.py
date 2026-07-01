@@ -232,6 +232,10 @@ def proxy(url, lite=None):
         target = url
         headers = { k: v for k, v in request.headers.items() if k.lower() != "host" }
 
+        # block prevention
+        headers['User-Agent'] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        headers["Accept-Language"] = "en-US,en;q=0.9"
+
         proxy = get_proxy_session()
         if request.method == "GET":
             response = proxy.request(
@@ -328,6 +332,10 @@ def pure_proxy(url, lite=None):
     try:
         target = url
         headers = { k: v for k, v in request.headers.items() if k.lower() != "host" }
+        
+        # block prevention
+        headers['User-Agent'] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        headers["Accept-Language"] = "en-US,en;q=0.9"
 
         proxy = get_proxy_session()
         if request.method == "GET":
