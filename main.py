@@ -274,7 +274,7 @@ def proxy(url, lite=None):
 
             if location:
                 location = urljoin(url, location)
-                return redirect(f"/proxy{"-lite" if lite else ""}/" + quote(location, safe=""))
+                return redirect(f"/proxy{"-lite" if lite else ""}/" + quote(unquote(location), safe=""))
         response.raise_for_status()
         content_type = response.headers.get('Content-Type', '').lower()
 
@@ -379,7 +379,7 @@ def pure_proxy(url, lite=None):
 
             if location:
                 location = urljoin(url, location)
-                return redirect(f"/pure-proxy{"-lite" if lite else ""}/" + quote(location, safe=""))
+                return redirect(f"/pure-proxy{"-lite" if lite else ""}/" + quote(unquote(location), safe=""))
         response.raise_for_status()
         content_type = response.headers.get('Content-Type', '').lower()
 
