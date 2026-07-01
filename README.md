@@ -63,6 +63,42 @@ def relay(path):
         return f"Relay error: {e}", 500
 ```
 
+## ⚙ Backend on anw.is-a.dev/api/ablaze
+
+This is the source code for the Flask endpoint at `anw.is-a.dev/api/ablaze`. **Please host it yourself and do not use my API for production. I do NOT guarantee 100% uptime.**
+
+```python
+@app.route('/api/ablaze', defaults={'url_path': ''}, methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
+@app.route('/api/ablaze/<path:url_path>', methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
+def ablaze_backend_proxy(url_path):
+    target_url = f"https://ablaze-cyan.vercel.app/{url_path}"
+    
+    headers = { k: v for k, v in request.headers.items() if k.lower() != "host" }
+    
+    try:
+        response = requests.request(
+            method=request.method,
+            url=target_url,
+            params=request.args,
+            data=request.get_data(),
+            cookies=request.cookies,
+            headers=headers,
+            allow_redirects=False,
+            timeout=60
+        )
+        
+        proxy_resp = Response(response.content, status=response.status_code)
+        
+        for k, v in response.headers.items():
+            if k.lower() not in ['content-encoding', 'transfer-encoding', 'content-length']:
+                proxy_resp.headers[k] = v
+                
+        return proxy_resp
+        
+    except Exception as e:
+        return f"Ablaze API Gateway Error: {e}", 500
+```
+
 ## 🤝 Contributors:
 
 None at the moment, but you can become one! Talk to [ANW](https://anw.is-a.dev/#contact) or make a PR to contribute.
