@@ -4,9 +4,9 @@ A simple search engine + website proxy so that you can browse the modern web on 
 
 **Website Links:**  
 
-- http://dih.pythonanywhere.com/ (HTTP/HTTPS)
-- https://ablaze-psi.vercel.app/ (only HTTPS and modern TLS/SSL, may not work on old browsers)
-- https://ablaze.anw.is-a.dev/ (same as above, but custom domain, coming soon)
+- http://dih.pythonanywhere.com/ (HTTP/HTTPS, slowest)
+- https://ablaze-cyan.vercel.app/ (only HTTPS and modern TLS/SSL, may not work on old browsers, fastest)
+- https://ablaze.anw.is-a.dev/ (same as above, but custom domain, coming soon, fastest)
 
 It uses the Python DDGS module for getting search results (aggregated) and a custom-made page stripper based proxy service so that you can freely browse the current, modern Internet on super old browsers. It also comes with a lite mode (to use, visit the `/lite` route!) for even more compatibility. It has both HTTP and HTTPS support, thanks to Vercel!  
 
