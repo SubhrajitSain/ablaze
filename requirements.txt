@@ -1,0 +1,6 @@
+flask
+requests
+beautifulsoup4
+upstash-redis
+duckduckgo_search
+gunicorn
