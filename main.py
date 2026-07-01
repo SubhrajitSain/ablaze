@@ -205,6 +205,10 @@ def proxy(url, lite=None):
     cleanup()
     lite = lite == '-lite'
     url = unquote(url)
+    if url.startswith("https:/") and not url.startswith("https://"):
+        url = url.replace("https:/", "https://", 1)
+    elif url.startswith("http:/") and not url.startswith("http://"):
+        url = url.replace("http:/", "http://", 1)
 
     allowed_attrs = {
         'href', 'src', 'alt', 'action', 'method',
@@ -306,6 +310,10 @@ def pure_proxy(url, lite=None):
     cleanup()
     lite = lite == '-lite'
     url = unquote(url)
+    if url.startswith("https:/") and not url.startswith("https://"):
+        url = url.replace("https:/", "https://", 1)
+    elif url.startswith("http:/") and not url.startswith("http://"):
+        url = url.replace("http:/", "http://", 1)
 
     allowed_attrs = {
         'href', 'src', 'alt', 'action', 'method',
