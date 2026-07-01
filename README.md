@@ -80,6 +80,9 @@ This is the source code for the Flask endpoint at `anw.is-a.dev/api/ablaze`. **P
 @app.route('/api/ablaze', defaults={'url_path': ''}, methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 @app.route('/api/ablaze/<path:url_path>', methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 def ablaze_backend_proxy(url_path):
+    if "api/ablaze" in url_path:
+        url_path = url_path.replace("api/ablaze/", "").replace("api/ablaze", "")
+
     if "proxy/https:/" in url_path and "proxy/https://" not in url_path:
         url_path = url_path.replace("proxy/https:/", "proxy/https://", 1)
     elif "proxy/http:/" in url_path and "proxy/http://" not in url_path:
@@ -89,7 +92,7 @@ def ablaze_backend_proxy(url_path):
         url_path = url_path.replace("pure-proxy/https:/", "pure-proxy/https://", 1)
     elif "pure-proxy/http:/" in url_path and "pure-proxy/http://" not in url_path:
         url_path = url_path.replace("pure-proxy/http:/", "pure-proxy/http://", 1)
-
+        
     target_url = f"https://ablaze-cyan.vercel.app/{url_path}"
     headers = { k: v for k, v in request.headers.items() if k.lower() not in ["host", "accept-encoding"] }
     
