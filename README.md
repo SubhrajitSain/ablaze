@@ -80,9 +80,18 @@ This is the source code for the Flask endpoint at `anw.is-a.dev/api/ablaze`. **P
 @app.route('/api/ablaze', defaults={'url_path': ''}, methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 @app.route('/api/ablaze/<path:url_path>', methods=["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"])
 def ablaze_backend_proxy(url_path):
+    if "proxy/https:/" in url_path and "proxy/https://" not in url_path:
+        url_path = url_path.replace("proxy/https:/", "proxy/https://", 1)
+    elif "proxy/http:/" in url_path and "proxy/http://" not in url_path:
+        url_path = url_path.replace("proxy/http:/", "proxy/http://", 1)
+        
+    if "pure-proxy/https:/" in url_path and "pure-proxy/https://" not in url_path:
+        url_path = url_path.replace("pure-proxy/https:/", "pure-proxy/https://", 1)
+    elif "pure-proxy/http:/" in url_path and "pure-proxy/http://" not in url_path:
+        url_path = url_path.replace("pure-proxy/http:/", "pure-proxy/http://", 1)
+
     target_url = f"https://ablaze-cyan.vercel.app/{url_path}"
-    
-    headers = { k: v for k, v in request.headers.items() if k.lower() != "host" }
+    headers = { k: v for k, v in request.headers.items() if k.lower() not in ["host", "accept-encoding"] }
     
     try:
         response = requests.request(
@@ -98,8 +107,9 @@ def ablaze_backend_proxy(url_path):
         
         proxy_resp = Response(response.content, status=response.status_code)
         
+        excluded_headers = ['content-encoding', 'transfer-encoding', 'content-length', 'content-range']
         for k, v in response.headers.items():
-            if k.lower() not in ['content-encoding', 'transfer-encoding', 'content-length']:
+            if k.lower() not in excluded_headers:
                 proxy_resp.headers[k] = v
                 
         return proxy_resp
