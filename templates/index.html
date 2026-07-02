@@ -43,16 +43,16 @@
       The system limits responses to the first 50 matches for speed and clarity. Actually, you will get about more or less 35 results at a time.<br><br>
 
       <b>How does it work?</b><br>
-      A Python backend (with Flask and/or WSGI (depends on our current hosting)) fetches pages in memory, strips complex scripts, and rewrites links. Then it sends you the old-school compatible HTML pages.<br><br>
+      In our current infrastructure, a Python Flask webserver on PythonAnywhere that allows HTTP gets your request. It then forwards it to our Ablaze server on Vercel which enforces HTTPS. For searches, it uses the Python ddgs module and sends back the response. For proxying sites, it requests that specific site (note that all sites don't work), gets its source code, strips out modern HTML/CSS/JS and returns the cleaned page back.<br><br>
 
       <b>What happens to my browsing data?</b><br>
-      Your data is <b>never</b> shared outside Ablaze. Your site data (cookies only) are completely wiped out from our DB after 1 hour of inactivity and NEVER RESTORED. This also means that not using Ablaze for 1 hour will completely reset your login info for websites, etc.
+      Your data is <b>never</b> shared outside Ablaze. Your site data (cookies only) are completely wiped out from our DB after 1 hour of inactivity and NEVER RESTORED. This also means that not using Ablaze for 1 hour will completely reset your login info for websites, etc.<br><br>
 
       <b>Why was Ablaze made?</b><br>
       To keep old machines exploring the modern Internet without breaking, like IE 5.0 on Windows 98 SE, as well as old Mac's.<br><br>
 
       <b>What was Ablaze inspired by?</b><br>
-      Ablaze was inspired by <i>FrogFind</i>, made by Action Retro (YouTuber).
+      Ablaze was inspired by <i><a href="http://frogfind.com">FrogFind</a></i>, made by Action Retro (YouTuber).
     </td></tr>
   </table>
 {% endblock %}
