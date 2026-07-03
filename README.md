@@ -19,6 +19,7 @@ Ablaze stores your cookies on Upstash for a maximum duration of 1 hour after ina
 - Windows 10 Pro 22H2 64bit /w Perplexity Comet, Google Chrome, Mozilla Firefox - `OK`
 - Android 8.1 /w Google Chrome - `OK`
 - [MrrpOS GNU/Linux](https://anw.is-a.dev/mrrpos) /w linux 6.13.2 /w Lynx 2.9.2 - `OK`
+- (DOSBox-X VM) Windows 98 SE /w Netscape Navigator 3.0 (JS off) - `PARTIAL` (UI issues and CF challenge JS)
 
 ## ⚙ Backend on dih.pythonanywhere.com
 
@@ -26,7 +27,7 @@ Ablaze stores your cookies on Upstash for a maximum duration of 1 hour after ina
 
 ```python
 from flask import Flask, request, Response
-from urllib.parse import urlparse, quote
+from urllib.parse import quote
 import requests
 
 app = Flask(__name__)
@@ -41,22 +42,60 @@ def relay(path):
 
     path = quote(path, safe="")
 
-    target_url = f"https://anw.is-a.dev/api/ablaze/{path}" if path else "https://anw.is-a.dev/api/ablaze"
-    params = request.args
+    target_url = (
+        f"https://anw.is-a.dev/api/ablaze/{path}"
+        if path else
+        "https://anw.is-a.dev/api/ablaze"
+    )
 
     try:
-        if request.method == "GET":
-            resp = requests.get(target_url, params=params, headers={"User-Agent": request.headers.get("User-Agent")}, allow_redirects=False)
-        else:
-            resp = requests.post(target_url, params=params, data=request.get_data(), headers={"User-Agent": request.headers.get("User-Agent")}, allow_redirects=False)
+        headers = {
+            k: v
+            for k, v in request.headers.items()
+            if k.lower() not in (
+                "host",
+                "user-agent",
+                "content-length",
+                "connection"
+            )
+        }
 
-        excluded_headers = ['host', 'content-encoding', 'content-length', 'transfer-encoding', 'connection']
-        headers = {k: v for k, v in resp.headers.items() if k.lower() not in excluded_headers}
+        headers["User-Agent"] = (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/137.0.0.0 Safari/537.36"
+        )
 
-        if 'Location' in resp.headers:
-            headers['Location'] = resp.headers['Location']
+        resp = requests.request(
+            method=request.method,
+            url=target_url,
+            params=request.args,
+            data=request.get_data(),
+            headers=headers,
+            allow_redirects=False,
+            timeout=30
+        )
 
-        return Response(resp.content, status=resp.status_code, headers=headers)
+        excluded_headers = {
+            "host",
+            "content-encoding",
+            "content-length",
+            "transfer-encoding",
+            "connection",
+        }
+
+        response_headers = {
+            k: v
+            for k, v in resp.headers.items()
+            if k.lower() not in excluded_headers
+        }
+
+        return Response(
+            resp.content,
+            status=resp.status_code,
+            headers=response_headers
+        )
+
     except Exception as e:
         return f"Relay error: {e}", 500
 ```
