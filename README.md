@@ -2,6 +2,9 @@
 
 A simple search engine + website proxy so that you can browse the modern web on browsers from the late 20th century.  
 
+> [!WARNING]
+> Turn of JavaScript in your browser or else you may get JS errors due to the Cloudflare challenge script.  
+
 **Website Links:**  
 
 - http://dih.pythonanywhere.com/ (HTTP/HTTPS, slowest)
